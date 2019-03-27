@@ -351,3 +351,4 @@ aggregated_df <- aggregated_df %>%
 
 # Export to .csv
 write.csv(aggregated_df, file = 'housingAggregation.csv')
+
