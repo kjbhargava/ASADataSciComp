@@ -2,7 +2,7 @@
 # select, wrangle, and clean the columns we wish to use for creating a 
 # housing quality index.
 #
-# Contributers: Lance Barto, Rachel Rosebrook
+# Contributers: Lance Barto, Rachel Rosebrook, Karan Bhargava
 # Version 1.0
 # March 26, 2019
 #
@@ -173,7 +173,7 @@ for (i in 1:10) {
                     ex_walls_cracks = c("Yes", "No", NA)) 
   
   cb5 <- data.frame(X_d4 = c(1, 9 ,8), 
-                    ex_walls_looseMaterial = c("Yes", "No", NA)) 
+                    ex_walls_loose_material = c("Yes", "No", NA)) 
   
   cb6 <- data.frame(X_e1 = c(1, 9, 8), 
                     ex_windows_missing = c("Yes", "No", NA))  
@@ -325,7 +325,7 @@ for (dataframe in df_list) {
   df <- rf_func(dataframe, cb1, 'borough', 'borough_name')
   df <- rf_func(df, cb2, 'X_d12', 'ex_walls_missing_sloping')
   df <- rf_func(df, cb4, 'X_d3', 'ex_walls_cracks')
-  df <- rf_func(df, cb5, 'X_d4', 'ex_walls_looseMaterial')
+  df <- rf_func(df, cb5, 'X_d4', 'ex_walls_loose_material')
   df <- rf_func(df, cb6, 'X_e1', 'ex_windows_missing')  
   df <- rf_func(df, cb7, 'X_e2', 'ex_windows_loose')
   df <- rf_func(df, cb8, 'X_e3', 'ex_windows_boarded')
