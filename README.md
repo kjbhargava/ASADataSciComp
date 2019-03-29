@@ -14,7 +14,7 @@ par(mar=c(5, 6, 5, 1), mgp=c(2.4, 0.8, 0), las=1)
 
 ## VISUALIZATION OF DATA
 
-### Use the following border and opacity values
+### Use the following border and opacity values (where relevsnt)
 
 ##### col = "grey99", alpha = .5
 
