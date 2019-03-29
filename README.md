@@ -20,9 +20,11 @@ par(mar=c(5, 6, 5, 1), mgp=c(2.4, 0.8, 0), las=1)
 
 ## COLOR_OPTIONS
 ### Please limit to the following colorblind-friendly options
-##### #006ba4 #c85200 #595959 
-##### #5f9ed1 #ff800e #898989
-##### #a2c8ec #ffbc79 #ababab
+![#006ba4](https://placehold.it/15/006ba4/000000?text=+) `#006ba4` ![#c85200](https://placehold.it/15/c85200/000000?text=+) `#c85200` ![#595959](https://placehold.it/15/595959/000000?text=+) `#595959`  
+![#5f9ed1](https://placehold.it/15/5f9ed1/000000?text=+) `#5f9ed1` ![#ff800e](https://placehold.it/15/ff800e/000000?text=+) `#ff800e` ![#898989](https://placehold.it/15/898989/000000?text=+) `#898989`  
+![#a2c8ec](https://placehold.it/15/a2c8ec/000000?text=+) `#a2c8ec` ![#ffbc79](https://placehold.it/15/ffbc79/000000?text=+) `#ffbc79` ![#ababab](https://placehold.it/15/ababab/000000?text=+) `#ababab`  
+
+
 
 ### Points can vary by size and shape (21<=pch<=25, col="grey99", bg=COLOR_OPTIONS)
 
