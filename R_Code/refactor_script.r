@@ -334,6 +334,9 @@ for (dataframe in df_list) {
 # Row bind the list of cleaned dataframes, in order
 aggregated_df <- bind_rows(clean_df_list)
 
+# fix years
+aggregated_df$year <- ifelse(aggregated_df$year < 2000, aggregated_df$year + 1900, aggregated_df$year)
+  
 # Factor the year column
 aggregated_df$year <- as.factor(aggregated_df$year)
 
@@ -348,6 +351,7 @@ aggregated_df <- aggregated_df %>%
                           heating_breakdown, num_heat_breakdowns, mice_present,
                           exterminator_service, wall_cracks_or_holes, holes_in_floors,
                           water_leaks, neighborhood_rating, peeling_paint_plaster)
+
 
 # Export to .csv
 write.csv(aggregated_df, file = 'housingAggregation.csv')
