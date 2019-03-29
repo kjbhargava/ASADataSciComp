@@ -1,4 +1,4 @@
-# Styleization guide
+# Style guide
 
 
 ### Overall paramaters we will be using.  
