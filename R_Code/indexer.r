@@ -32,7 +32,7 @@ index.condition[other_bin_issues] <- lapply(index.condition[other_bin_issues], f
 con <- index.condition$building_condition
 con <- ifelse(con == "Sound", 0, ifelse(con == "Deteriorating", 1, 2))
 index.condition$building_condition <- con
-rm(con, condition, yesnoindexer)
+rm(con, yesnoindexer)
 
 data <- select(data, "year", "borough_name")
 data$index <- rowSums(index.condition)
