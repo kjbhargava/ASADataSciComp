@@ -34,13 +34,13 @@ df_list <- list()
 for (i in 1:length(years)) {
 
     # Data-only data frame (with no headers):
-    data <- read.csv(paste('nycHousing', years[i], '.csv', sep = ''), 
+    data <- read.csv(paste('../nycHousing', years[i], '.csv', sep = ''), 
                      skip = 2, header = FALSE)
 
     # Temporary data frame from which to extract the 
     # first row of headers, nrows = 2 so we don't waste time reading
     # the whole csv again.
-    tmp <- read.csv(paste('nycHousing', years[i], '.csv', sep = ''), 
+    tmp <- read.csv(paste('../nycHousing', years[i], '.csv', sep = ''), 
                     header = TRUE, nrows = 2)
 
     # Use headers from tmp for nych17:
