@@ -25,21 +25,16 @@ yesnoindexer <- function(column, yes = 1, no = 0){
 index.condition <- data %>%
   select(conditionslist)
 
+index.condition[ex_struc_issues] <- lapply(index.condition[ex_struc_issues], function(x) yesnoindexer(x, yes=5))
 
-for(condition in ex_struc_issues){
-  index.condition[,condition] <- yesnoindexer(index.condition[,condition], yes = 5)
-}
-for(condition in other_bin_issues){
-  index.condition[,condition] <- yesnoindexer(index.condition[,condition], yes = 2)
-}
+index.condition[other_bin_issues] <- lapply(index.condition[other_bin_issues], function(x) yesnoindexer(x, yes=2))
 
 con <- index.condition$building_condition
 con <- ifelse(con == "Sound", 0, ifelse(con == "Deteriorating", 1, 2))
 index.condition$building_condition <- con
-rm(con, condition)
+rm(con, condition, yesnoindexer)
 
 data <- select(data, "year", "borough_name")
 data$index <- rowSums(index.condition)
 data <- drop_na(data)
-data %>%
-  ggplot() + geom_bar(aes(x=index))
+
