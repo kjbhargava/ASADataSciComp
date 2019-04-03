@@ -249,7 +249,8 @@ for (i in 1:10) {
                      water_leaks = c("Yes", "No", NA))
   
   cb31 <- data.frame(X_39 = c(1:4,8), 
-                     neighborhood_rating = c("Excellent", "Good", "Fair", "Poor", NA))
+                     neighborhood_rating = c("Excellent", "Good", 
+                                             "Fair", "Poor", NA))
   
   cb32 <- data.frame(peeling_paint_plaster1 = c(2, 3, 8, 9), 
                      peeling_paint_plaster = c("Yes", "No", NA, "No"))
@@ -334,7 +335,9 @@ for (dataframe in df_list) {
 aggregated_df <- bind_rows(clean_df_list)
 
 # fix years
-aggregated_df$year <- ifelse(aggregated_df$year < 2000, aggregated_df$year + 1900, aggregated_df$year)
+aggregated_df$year <- ifelse(aggregated_df$year < 2000, 
+                             aggregated_df$year + 1900, 
+                             aggregated_df$year)
 
 # Factor the year column
 aggregated_df$year <- as.factor(aggregated_df$year)
@@ -357,23 +360,28 @@ write.csv(aggregated_df, file = 'housingAggregation.csv')
 
 rm(list=setdiff(ls(), "aggregated_df"))
 
-# Create Index
-
+# The following code block creates a weighted index which indicates the number
+# of problems that 
 data <- read.csv("housingAggregation.csv")
 
-conditionslist <- c("ex_walls_missing_sloping" , "ex_walls_cracks", "ex_walls_looseMaterial", 
-                    "ex_windows_missing", "ex_windows_loose", "ex_windows_boarded", 
-                    "handrail_problem", "stairway_problem", "floors_deeply_worn", 
-                    "floors_holes", "building_condition", "heating_breakdown", 
-                    "mice_present", "wall_cracks_or_holes", "holes_in_floors", 
-                    "water_leaks", "peeling_paint_plaster")
+conditionslist <- c("ex_walls_missing_sloping" , "ex_walls_cracks", 
+                    "ex_walls_looseMaterial", "ex_windows_missing", 
+                    "ex_windows_loose", "ex_windows_boarded", 
+                    "handrail_problem", "stairway_problem", 
+                    "floors_deeply_worn", "floors_holes", 
+                    "building_condition", "heating_breakdown", 
+                    "mice_present", "wall_cracks_or_holes",
+                    "holes_in_floors", "water_leaks", 
+                    "peeling_paint_plaster")
 
-ex_struc_issues <- c("ex_walls_missing_sloping" , "ex_walls_cracks", "ex_walls_looseMaterial", 
-                     "ex_windows_missing", "ex_windows_loose", "ex_windows_boarded")
+ex_struc_issues <- c("ex_walls_missing_sloping" , "ex_walls_cracks", 
+                     "ex_walls_looseMaterial", "ex_windows_missing", 
+                     "ex_windows_loose", "ex_windows_boarded")
 
-other_bin_issues <- c("handrail_problem", "stairway_problem", "floors_deeply_worn", 
-                      "floors_holes", "heating_breakdown", 
-                      "mice_present", "wall_cracks_or_holes", "holes_in_floors", 
+other_bin_issues <- c("handrail_problem", "stairway_problem", 
+                      "floors_deeply_worn", "floors_holes", 
+                      "heating_breakdown", "mice_present", 
+                      "wall_cracks_or_holes", "holes_in_floors", 
                       "water_leaks", "peeling_paint_plaster")
 
 yesnoindexer <- function(column, yes = 1, no = 0){
@@ -383,9 +391,11 @@ yesnoindexer <- function(column, yes = 1, no = 0){
 index.condition <- data %>%
   select(conditionslist)
 
-index.condition[ex_struc_issues] <- lapply(index.condition[ex_struc_issues], function(x) yesnoindexer(x, yes=5))
+index.condition[ex_struc_issues] <- lapply(index.condition[ex_struc_issues], 
+                                           function(x) yesnoindexer(x, yes=5))
 
-index.condition[other_bin_issues] <- lapply(index.condition[other_bin_issues], function(x) yesnoindexer(x, yes=2))
+index.condition[other_bin_issues] <- lapply(index.condition[other_bin_issues], 
+                                            function(x) yesnoindexer(x, yes=2))
 
 con <- index.condition$building_condition
 con <- ifelse(con == "Sound", 0, ifelse(con == "Deteriorating", 1, 2))
@@ -401,6 +411,8 @@ yearmean <- data %>%
   summarize(indmean = mean(index))
 yearmean$borough_name <- rep("New York (overall)", length(yearmean$year))
 
+                                            
+# The following code creates a visualization of the weighted index                                           
 data %>%
   group_by(borough_name, year) %>%
   mutate(indmean = mean(index)) %>%
@@ -415,8 +427,24 @@ data %>%
            color = "Borough", shape = 'Borough',
            x = 'Year', y = 'Average number of problems (weighted)')
 
-# The following code creates an dataframe of some standard statistical analysis of the 
-# weighted index column
+# The following code snippet creates a visualization of the unweighted means
+housing_stats <- housing %>%
+  group_by(year, borough_name) %>%
+  summarize(h_mean = mean(total_issues),
+            h_total = sum(total_issues),
+            ex_total = sum(ex_issues),
+            int_total = sum(Int_issues))
+
+ggplot(housing_stats, mapping = aes(x  =year,y = h_mean, color = borough_name, shape = borough_name)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Year", y = "Mean of Issues (unweighted)", title = "Mean of Issues per Year by Borough", 
+       shape = "Borough",
+       color = "Borough")
+
+                                                                              
+# The following code creates an dataframe of some standard statistical 
+# analysis of the weighted index column
 stat_summary <- function(y) {
 
     x <- data %>%
@@ -449,17 +477,3 @@ colnames(stats_table) <- c('Year',
 stats_table
 
 
-###### Graphing unweighted means ######
-housing_stats <- housing %>%
-  group_by(year, borough_name) %>%
-  summarize(h_mean = mean(total_issues),
-            h_total = sum(total_issues),
-            ex_total = sum(ex_issues),
-            int_total = sum(Int_issues))
-
-ggplot(housing_stats, mapping=aes(x=year,y=h_mean,color=borough_name, shape=borough_name)) +
-  geom_point() +
-  geom_line() +
-  labs(x = "Year", y = "Mean of Issues (unweighted)", title = "Mean of Issues per Year by Borough", 
-       shape = "Borough",
-       color = "Borough")
