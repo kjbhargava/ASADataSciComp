@@ -411,3 +411,36 @@ data %>%
   ylab("Average number of problems (weighted)") +
   ggtitle("Reported Problems by Borough and Year", subtitle =  "(with overall)") +
   labs(color = "Borough")
+
+# The following code creates an dataframe of some standard statistical analysis of the 
+# weighted index column
+stat_summary <- function(y) {
+
+    x <- data %>%
+        group_by(year) %>%
+        select(year, index) %>%
+        filter(year == y)
+
+    x <- x[['index']]
+
+    index_mean <- mean(x)
+    index_median <- median(x)
+    index_sd <- sd(x)
+    
+    return(cbind(y, index_mean, index_median, index_sd))
+}
+
+years <- c(1991, seq(1993, 2017, 3))
+
+stats_table <- data.frame()
+
+for (i in years) {
+    stats_table <- rbind(stats_table, stat_summary(i))
+}
+
+colnames(stats_table) <- c('Year', 
+                           'Mean', 
+                           'Median', 
+                           'Standard Deviation')
+
+stats_table
