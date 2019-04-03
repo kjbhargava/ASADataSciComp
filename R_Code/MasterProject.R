@@ -431,7 +431,7 @@ data %>%
 
 # The following code snippet creates a visualization of the unweighted means
 # Be sure to use housingAggCondensed .csv 
-housing <- read.csv(../housingAggCondensed.csv, header = TRUE, 
+housing <- read.csv('../housingAggCondensed.csv', header = TRUE, 
                     stringsAsFactors = FALSE)
 
 housing_stats <- housing %>%
