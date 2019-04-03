@@ -361,9 +361,10 @@ write.csv(aggregated_df, file = 'housingAggregation.csv')
 rm(list=setdiff(ls(), "aggregated_df"))
 
 # The following code block creates a weighted index which indicates the number
-# of problems that 
+# of problems that a home reported
 data <- read.csv("housingAggregation.csv")
 
+# Isolate the columns to be used in the index
 conditionslist <- c("ex_walls_missing_sloping" , "ex_walls_cracks", 
                     "ex_walls_looseMaterial", "ex_windows_missing", 
                     "ex_windows_loose", "ex_windows_boarded", 
@@ -384,6 +385,7 @@ other_bin_issues <- c("handrail_problem", "stairway_problem",
                       "wall_cracks_or_holes", "holes_in_floors", 
                       "water_leaks", "peeling_paint_plaster")
 
+# A function to convert 'yes' and 'no' to 0 and 1
 yesnoindexer <- function(column, yes = 1, no = 0){
   return(ifelse(column == "Yes", yes, no))
 }
@@ -430,7 +432,7 @@ data %>%
 # The following code snippet creates a visualization of the unweighted means
 
 ## Use housingAggCondensed
-housing <- read.csv(file.choose(), header=TRUE, stringsAsFactors = FALSE)
+housing <- read.csv(../housingAggCondensed.csv, header=TRUE, stringsAsFactors = FALSE)
 
 housing_stats <- housing %>%
   group_by(year, borough_name) %>%
@@ -482,5 +484,3 @@ colnames(stats_table) <- c('Year',
                            'Standard Deviation')
 
 stats_table
-
-
