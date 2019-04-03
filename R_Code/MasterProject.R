@@ -444,3 +444,19 @@ colnames(stats_table) <- c('Year',
                            'Standard Deviation')
 
 stats_table
+
+
+###### Graphing unweighted means ######
+housing_stats <- housing %>%
+  group_by(year, borough_name) %>%
+  summarize(h_mean = mean(total_issues),
+            h_total = sum(total_issues),
+            ex_total = sum(ex_issues),
+            int_total = sum(Int_issues))
+
+ggplot(housing_stats, mapping=aes(x=year,y=h_mean,color=borough_name, shape=borough_name)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Year", y = "Mean of Issues (unweighted)", title = "Mean of Issues per Year by Borough", 
+       shape = "Borough",
+       color = "Borough")
