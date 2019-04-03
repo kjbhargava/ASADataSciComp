@@ -428,20 +428,27 @@ data %>%
            x = 'Year', y = 'Average number of problems (weighted)')
 
 # The following code snippet creates a visualization of the unweighted means
+
+## Use housingAggCondensed
+housing <- read.csv(file.choose(), header=TRUE, stringsAsFactors = FALSE)
+
 housing_stats <- housing %>%
   group_by(year, borough_name) %>%
-  summarize(h_mean = mean(total_issues),
-            h_total = sum(total_issues),
-            ex_total = sum(ex_issues),
-            int_total = sum(Int_issues))
+  summarize(mean = mean(total_issues))
 
-ggplot(housing_stats, mapping = aes(x  =year,y = h_mean, color = borough_name, shape = borough_name)) +
-  geom_point() +
+yearmean <- housing %>%
+  group_by(year) %>%
+  summarize(mean = mean(total_issues))
+yearmean$borough_name <- rep("New York (overall)", length(yearmean$year))
+
+ggplot(housing_stats, mapping=aes(x=year,y=mean,color=borough_name, shape=borough_name)) +
+  geom_point() + 
   geom_line() +
+  geom_point(data = yearmean) + 
+  geom_line(data = yearmean) +
   labs(x = "Year", y = "Mean of Issues (unweighted)", title = "Mean of Issues per Year by Borough", 
        shape = "Borough",
        color = "Borough")
-
                                                                               
 # The following code creates an dataframe of some standard statistical 
 # analysis of the weighted index column
