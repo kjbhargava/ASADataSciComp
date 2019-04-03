@@ -404,13 +404,16 @@ yearmean$borough_name <- rep("New York (overall)", length(yearmean$year))
 data %>%
   group_by(borough_name, year) %>%
   mutate(indmean = mean(index)) %>%
-  ggplot(aes(x=year, y = indmean, color = borough_name)) + 
-  geom_line(aes(group = borough_name)) + 
-  geom_line(data = yearmean) +
-  xlab("Year") +
-  ylab("Average number of problems (weighted)") +
-  ggtitle("Reported Problems by Borough and Year", subtitle =  "(with overall)") +
-  labs(color = "Borough")
+  
+  ggplot(aes(x=year, y = indmean, color = borough_name, shape = borough_name)) + 
+      geom_point(aes(group = borough_name)) + 
+      geom_line(aes(group = borough_name)) + 
+      geom_point(data = yearmean) +
+      geom_line(data = yearmean) +
+      labs(title = "Reported Problems by Borough and Year", 
+           subtitle =  "(with overall)",
+           color = "Borough", shape = 'Borough',
+           x = 'Year', y = 'Average number of problems (weighted)')
 
 # The following code creates an dataframe of some standard statistical analysis of the 
 # weighted index column
