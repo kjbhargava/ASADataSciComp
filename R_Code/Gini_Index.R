@@ -56,3 +56,32 @@ gini.index(data.frame2$num_units)
 gini.index(data.frame2$num_stories)
 #data:  data.frame2$num_stories
 #Gini Index = 0.2812, delta = 2.1467
+
+gini.index(data.frame2$num_rooms)
+#data:  data.frame2$num_rooms
+#Gini Index = 0.20939, delta = 1.5303
+
+gini.index(data.frame2$num_bedrooms)
+#data:  data.frame2$num_bedrooms
+#Gini Index = 0.19499, delta = 1.061
+
+gini.index(data.frame2$monthly_rent)
+#data:  data.frame2$monthly_rent
+#Gini Index = 0.80992, delta = 22919
+
+gini.index(data.frame2$outofpocket_rent)
+#data:  data.frame2$outofpocket_rent
+#Gini Index = 0.81604, delta = 23298
+
+gini.index(data.frame2$hhinc)
+#data:  data.frame2$hhinc
+#Gini Index = 0.79677, delta = 289610
+
+gini.index(data.frame2$num_under6)
+#data:  data.frame2$num_under6
+#Gini Index = 0.13158, delta = 0.30872
+
+gini.index(data.frame2$num_under18)
+#data:  data.frame2$num_under18
+#Gini Index = 0.26486, delta = 0.79821
+
