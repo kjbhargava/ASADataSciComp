@@ -1,7 +1,7 @@
 
 ##input files
 owned <- read.csv("C:\\Users\\maybe\\Downloads\\ownedNYCHVS_midterm2.csv", header = T)
-rented <- read.csv("C:\\Users\\maybe\\Downloads\\ownedNYCHVS_midterm2.csv", header = T)
+rented <- read.csv("C:\\Users\\maybe\\Downloads\\rentedNYCHVS_midterm3.csv", header = T)
 
 ##owned linear models
 #meaningful prediction, but low R value
