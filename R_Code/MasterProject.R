@@ -17,6 +17,10 @@
 # version.string R version 3.5.1 (2018-07-02)
 # nickname       Feather Spray  
 
+
+##### Data Wrangling ###################################################
+##### Part 1 ###########################################################
+
 # Imports
 library(dplyr)
 library(tidyr)
@@ -358,11 +362,123 @@ aggregated_df <- aggregated_df %>%
 # Export to .csv
 write.csv(aggregated_df, file = 'housingAggregation.csv')
 
-rm(list=setdiff(ls(), "aggregated_df"))
+###### Data Wrangling Part 2 ##################################################
+###############################################################################
 
-# The following code block creates a weighted index which indicates the number
-# of problems that a home reported
-data <- read.csv("housingAggregation.csv")
+# Read in most recent data
+data <- df_list[[10]]
+
+# Select columns with only numerical data
+data <- data %>%
+            select('X_i', 'X_4a', 'X_12b', 'X_13', 'X_15b', 'X_15c', 'X_20',
+                'X_22a', 'X_24a', 'X_24b', 'X_30a', 'X_31b', 'year', 
+                'hhinc', 'under6', 'under18')
+
+# Assign NA's to unreported or invalid responses
+data$X_12b[data$X_12b == 9999999 | data$X_12b == 9999998] <- NA
+data$X_13[data$X_13 == 9999998 | data$X_13 == 9999999] <- NA
+data$X_15b[data$X_15b == 9998 | data$X_15b == 9999] <- NA
+data$X_15c[data$X_15c == 9999 | data$X_15c == 9998] <- NA
+data$X_30a[data$X_30a == 99999] <- NA
+data$X_31b[data$X_31b == 99998 | data$X_31b == 99999] <- NA
+data$hhinc[data$hhinc == 9999999] <- NA
+data$X_i[data$X_i == 8] <- NA
+data$X_i[data$X_i == 2] <- 0
+
+# Select the columns which have a large proportion of non-NA answers
+# for the properties that are owned
+owned_data2017 <- data %>%
+    select('X_i', 'X_13', 'X_20', 'X_22a', 'X_24a', 
+           'X_24b', 'hhinc', 'under6', 'under18', 'year', )
+
+# Select the columns which have a large proportion of non-NA answers
+# for the properties that are rented
+rented_data2017 <- data %>%
+    select('X_i', 'X_20', 'X_22a', 'X_24a', 'X_24b', 'X_30a', 
+           'X_31b', 'year', 'hhinc', 'under6', 'under18')
+
+# Remove rows with NA's
+owned_data2017 <-na.omit(owned_data2017)
+rented_data2017 <- na.omit(rented_data2017)
+
+# Read in 2014 data
+data1 <- df_list[[9]]
+
+# Select columns with only numerical data
+data1 <- data1 %>%
+            select('X_i', 'X_4a', 'X_12b', 'X_13', 'X_15b', 'X_15c', 'X_20',
+                'X_22a', 'X_24a', 'X_24b', 'X_30a', 'X_31b', 'year', 
+                'hhinc', 'under6', 'under18')
+
+# Assign NA's to unreported or invalid responses
+data1$X_12b[data1$X_12b == 9999999 | data1$X_12b == 9999998] <- NA
+data1$X_13[data1$X_13 == 9999998 | data1$X_13 == 9999999] <- NA
+data1$X_15b[data1$X_15b == 9998 | data1$X_15b == 9999] <- NA
+data1$X_15c[data1$X_15c == 9999 | data1$X_15c == 9998] <- NA
+data1$X_30a[data1$X_30a == 99999] <- NA
+data1$X_31b[data1$X_31b == 99998 | data1$X_31b == 99999] <- NA
+data1$hhinc[data1$hhinc == 9999999] <- NA
+data1$X_i[data1$X_i == 8] <- NA
+data1$X_i[data1$X_i == 2] <- 0
+
+# Select the columns which have a large proportion of non-NA answers
+# for the properties that are owned
+owned_data2014 <- data1 %>%
+    select('X_i', 'X_13', 'X_20', 'X_22a', 'X_24a', 
+           'X_24b', 'hhinc', 'under6', 'under18', 'year')
+
+# Select the columns which have a large proportion of non-NA answers
+# for the properties that are rented
+rented_data2014 <- data1 %>%
+    select('X_i', 'X_20', 'X_22a', 'X_24a', 'X_24b', 'X_30a', 
+           'X_31b', 'year', 'hhinc', 'under6', 'under18')
+
+# Remove rows with NA's
+owned_data2014 <-na.omit(owned_data2014)
+rented_data2014 <-na.omit(rented_data2014)
+
+# Read in 2011 data
+data2 <- df_list[[8]]
+
+# Assign NA's to unreported or invalid responses
+data2$X_12b[data2$X_12b == 9999999 | data2$X_12b == 9999998] <- NA
+data2$X_13[data2$X_13 == 9999998 | data2$X_13 == 9999999] <- NA
+data2$X_15b[data2$X_15b == 9998 | data2$X_15b == 9999] <- NA
+data2$X_15c[data2$X_15c == 9999 | data2$X_15c == 9998] <- NA
+data2$X_30a[data2$X_30a == 99999] <- NA
+data2$X_31b[data2$X_31b == 99998 | data2$X_31b == 99999] <- NA
+data2$hhinc[data2$hhinc == 9999999] <- NA
+data2$X_i[data2$X_i == 8] <- NA
+data2$X_i[data2$X_i == 2] <- 0
+
+# Select the columns which have a large proportion of non-NA answers
+# for the properties that are owned
+owned_data2011 <- data2 %>%
+    select('X_i', 'X_13', 'X_20', 'X_22a', 'X_24a', 
+           'X_24b', 'hhinc', 'under6', 'under18', 'year')
+
+# Select the columns which have a large proportion of non-NA answers
+# for the properties that are rented
+rented_data2011 <- data2 %>%
+    select('X_i', 'X_20', 'X_22a', 'X_24a', 'X_24b', 'X_30a', 
+           'X_31b', 'year', 'hhinc', 'under6', 'under18')
+
+# Remove rows with NA's
+owned_data2011 <- na.omit(owned_data2011)
+rented_data2011 <- na.omit(rented_data2011)
+
+# Aggregate the df's
+owned_data <- rbind(owned_data2011, owned_data2014, owned_data2017)
+rented_data <- rbind(rented_data2011, rented_data2014, rented_data2017)
+
+# Write .csv's
+write.csv(owned_data, file = 'ownedNYCHVS_midterm2.csv', row.names = FALSE)
+write.csv(rented_data, file = 'rentedNYCHVS_midterm3.csv', row.names = FALSE)
+
+###### The following code block creates a weighted index which indicates the number ######
+###### of problems that a home reported ##################################################
+
+data <- aggregated_df
 
 # Isolate the columns to be used in the index
 conditionslist <- c("ex_walls_missing_sloping" , "ex_walls_cracks", 
@@ -414,7 +530,9 @@ yearmean <- data %>%
 yearmean$borough_name <- rep("New York (overall)", length(yearmean$year))
 
                                             
-# The following code creates a visualization of the weighted index                                           
+####### The following code creates a visualization of the weighted index  #########
+###################################################################################                                            
+                                            
 data %>%
   group_by(borough_name, year) %>%
   mutate(indmean = mean(index)) %>%
@@ -489,4 +607,161 @@ colnames(stats_table) <- c('Year',
                            'Median', 
                            'Standard Deviation')
 
-stats_table
+## Machine Learning Model Code ############################################
+###########################################################################                                            
+
+# Import random forest package
+library(randomForest)
+
+# Assign the appropriate dataframe, and drop the rows with NA's                                            
+forest_data <- aggregated_df
+forest_data <- drop_na(forest_data)
+
+# Split into training and testing sets:
+set.seed(42)
+
+# Create random index values to partition the data into training and testing 
+# at a 70/30 split                                           
+train <- sample(nrow(forest_data), .7*nrow(forest_data), replace = FALSE)
+
+# Partition the data                                           
+trainset <- forest_data[train,]
+testset <- forest_data[-train,]
+
+# Default Random Forest
+model1 <- randomForest(borough_name ~ ., data = trainset, importance = TRUE)
+                                            
+########## Multiple Linear Regression Model ##############################
+##########################################################################
+                                            
+# Read in input files
+owned <- read.csv("../ownedNYCHVS_midterm2.csv", header = T)
+rented <- read.csv("../rentedNYCHVS_midterm3.csv", header = T)
+
+# Linear Models for the 'owned' dataset
+# A model with a meaningful prediction, but low R value
+myRegOwnedinc <- lm(hhinc ~ value + num_rooms + num_bedrooms + 
+                    num_under18, data = owned)
+
+# A meaningless prediction, but bst R value that could be found
+myRegOwnedbed <- lm(num_bedrooms ~  num_rooms + num_stories + 
+                    num_under18, data = owned)
+
+# Linear models for the 'rented' dataset
+
+# A meaningful prediction, but low R value
+myRegRentedval <- lm(value ~ num_under18 + hhinc, data = rented)
+
+# A meaningless prediction, but best R value that could be found
+myRegRentedbed <- lm(num_bedrooms ~ num_rooms + num_under18 + 
+                     value + num_under6, data = rented)
+
+# Residuals for the linear models
+myRegOwnedincRes <- resid(myRegOwnedinc)
+myRegOwnedbedRes <- resid(myRegOwnedbed)
+myRegRentedvalRes <- resid(myRegRentedval)
+myRegRentedbedRes <- resid(myRegRentedbed)
+
+# Plots came out ugly and had too many datapoints just scattered 
+# about for meaningful representation.
+                                            
+# Summary calls might be the best way to summarize things
+summary(myRegOwnedinc)
+summary(myRegOwnedbed)
+summary(myRegRentedval)
+summary(myRegREntedbed)
+                                            
+###### Logistic Regression Models ##############################  
+################################################################                                            
+                                            
+# Read in file
+lrtotal <- read.csv("../lr.csv", headers = T)
+
+# Separate into owners and renters
+lrown <- lrtotal %>% filter(Value != 9999999)
+lrrent <- lrtotal %>% filter(Monthly.contract.rent != 99999)
+
+# Include only rows where toilet breakdowns and presence of mice were answered
+lrrent <- lrrent[lrrent$Toilet.breakdowns %in% c(1,2), ]
+lrrent <- lrrent[lrrent$Presence.of.mice.or.rats %in% c(1,2), ]
+lrown <- lrown[lrown$Toilet.breakdowns %in% c(1,2), ]
+lrown <- lrown[lrown$Presence.of.mice.or.rats %in% c(1,2), ]
+
+# Change no values from 2 to 0
+lrrent$Toilet.breakdowns[lrrent$Toilet.breakdowns == 2] <- 0
+lrrent$Presence.of.mice.or.rats[lrrent$Presence.of.mice.or.rats == 2] <- 0
+lrown$Toilet.breakdowns[lrown$Toilet.breakdowns == 2] <- 0
+lrown$Presence.of.mice.or.rats[lrown$Presence.of.mice.or.rats == 2] <- 0
+
+# Plots
+ggplot(data = lrrent, mapping = aes(y = Toilet.breakdowns, 
+                                    x = Monthly.contract.rent)) +
+  geom_point() +
+  labs(title = "Toilet Breakdowns vs Monthly Rent") +
+  geom_smooth(method = "glm", 
+              method.args = list(family = binomial), 
+              se = FALSE)
+
+ggplot(data = lrrent, mapping = aes(y = Presence.of.mice.or.rats, 
+                                    x = Monthly.contract.rent)) +
+  geom_point() +
+  labs(title = "Presence of Mice or Rats vs Monthly Rent") +
+  geom_smooth(method = "glm", 
+              method.args = list(family = binomial), 
+              se = FALSE)
+
+ggplot(data = lrown, mapping = aes(y = Toilet.breakdowns, x = Value)) +
+  geom_point() +
+  labs(title = "Toilet Breakdowns vs Value of Home") +
+  geom_smooth(method = "glm", 
+              method.args = list(family = binomial), 
+              se = FALSE)
+
+ggplot(data = lrown, mapping = aes(y = Presence.of.mice.or.rats, x = Value)) +
+  geom_point() +
+  labs(title = "Presence of Mice or Rats vs Value of Home") +
+  geom_smooth(method = "glm", 
+              method.args = list(family = binomial), 
+              se = FALSE)
+                                            
+####### Gini Index Values ##################################
+############################################################   
+                                            
+                                            getwd()
+setwd("C:/Users/karan/Desktop/ASADataSciComp/R_Code")
+getwd()
+
+#data.frame1 is ownedNYCHVS
+data.frame1 <- read.csv("../ownedNYCHVS_midterm2.csv")
+
+#data.frame2 is rentedNYCHVS
+data.frame2 <- read.csv("../rentedNYCHVS_midterm3.csv")
+View(data.frame1)
+View(data.frame2)
+
+library(lawstat)
+
+###################################################
+# Owned homes Gini Index
+
+gini.index(data.frame1$broken_windows)
+gini.index(data.frame1$value)
+gini.index(data.frame1$num_units)
+gini.index(data.frame1$num_stories)
+gini.index(data.frame1$num_rooms)
+gini.index(data.frame1$hhinc)
+gini.index(data.frame1$num_under6)
+gini.index(data.frame1$num_under18)
+
+#################################################
+
+# Rented Homes Gini Index
+gini.index(data.frame2$num_units)
+gini.index(data.frame2$num_stories)
+gini.index(data.frame2$num_rooms)
+gini.index(data.frame2$num_bedrooms)
+gini.index(data.frame2$monthly_rent)
+gini.index(data.frame2$outofpocket_rent)
+gini.index(data.frame2$hhinc)
+gini.index(data.frame2$num_under6)
+gini.index(data.frame2$num_under18)
