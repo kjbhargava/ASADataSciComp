@@ -6,7 +6,7 @@ getwd()
 data.frame1 <- read.csv("../owned_NY_Data_Final.csv")
 
 #data.frame2 is rentedNYCHVS
-data.frame2 <- read.csv("../rented_NY_Data_Final.csv")
+data.frame2 <- read.csv("../rented_NY_supersmall.csv")
 View(data.frame1)
 View(data.frame2)
 
