@@ -3,14 +3,15 @@ setwd("C:/Users/karan/Desktop/ASADataSciComp/R_Code")
 getwd()
 
 #data.frame1 is ownedNYCHVS
-data.frame1 <- read.csv("../ownedNYCHVS_midterm2.csv")
+data.frame1 <- read.csv("../owned_NY_Data_Final.csv")
 
 #data.frame2 is rentedNYCHVS
-data.frame2 <- read.csv("../rentedNYCHVS_midterm3.csv")
+data.frame2 <- read.csv("../rented_NY_Data_Final.csv")
 View(data.frame1)
 View(data.frame2)
 
 library(lawstat)
+library(ape)
 
 ###################################################
 #owned homes Gini Index
@@ -85,3 +86,58 @@ gini.index(data.frame2$num_under18)
 #data:  data.frame2$num_under18
 #Gini Index = 0.26486, delta = 0.79821
 
+#cluster with low gini index
+#number under 6 for owned homes and number under 6 for rented homes
+
+
+#grouping of about 1% of the data with number of under 6 year olds in 
+#rented home (4 child leafs/groupings)
+
+length(data.frame2$num_under6)
+arr_dist <- dist(data.frame2$num_under6, method = "euclidean")
+arr_clust <-hclust(arr_dist)
+arr_tree<-as.phylo(arr_clust)
+plot(arr_tree,cex = .5)
+
+#grouping of about 1% of the data with number of under 6 year olds in 
+#owned home (3 child leafs/groupings)
+
+arr_dist2<- dist(data.frame1$num_under6, method = "euclidean")
+arr_clust2 <- hclust(arr_dist2)
+arr_tree2<-as.phylo(arr_clust2)
+plot(arr_tree2,cex = .5)
+
+#cluster with the highest gini index scores
+#broken windows for owned homes
+#out of pocket rent for rented homes
+#(crap ton of branching )
+arr_dist3<- dist(data.frame2$outofpocket_rent, method = "euclidean")
+arr_clust3 <- hclust(arr_dist3)
+arr_tree3<-as.phylo(arr_clust3)
+plot(arr_tree3,cex = .5)
+
+#broken windows for owned homes
+#2 branches
+arr_dist4<- dist(data.frame1$ï..broken_windows, method = "euclidean")
+arr_clust4 <- hclust(arr_dist4)
+arr_tree4<-as.phylo(arr_clust4)
+plot(arr_tree4,cex = .5)
+
+
+#middle value gini indices
+#number of stories for both owned
+#and rented homes
+#7 branches
+#this is owned homes
+arr_dist5<- dist(data.frame1$num_stories, method = "euclidean")
+arr_clust5 <- hclust(arr_dist5)
+arr_tree5<-as.phylo(arr_clust5)
+plot(arr_tree5,cex = .5)
+
+
+#and rented homes
+#also 7 branches
+arr_dist6<- dist(data.frame2$num_stories, method = "euclidean")
+arr_clust6 <- hclust(arr_dist6)
+arr_tree6<-as.phylo(arr_clust6)
+plot(arr_tree6,cex = .5)
