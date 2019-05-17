@@ -732,14 +732,15 @@ setwd("C:/Users/karan/Desktop/ASADataSciComp/R_Code")
 getwd()
 
 #data.frame1 is ownedNYCHVS
-data.frame1 <- read.csv("../ownedNYCHVS_midterm2.csv")
+data.frame1 <- read.csv("../owned_NY_Data_Final.csv")
 
 #data.frame2 is rentedNYCHVS
-data.frame2 <- read.csv("../rentedNYCHVS_midterm3.csv")
+data.frame2 <- read.csv("../rented_NY_Data_Final.csv")
 View(data.frame1)
 View(data.frame2)
 
 library(lawstat)
+library(ape)
 
 ###################################################
 # Owned homes Gini Index
@@ -799,7 +800,7 @@ plot(arr_tree3,cex = .5)
 # Broken windows for owned homes
 # 2 branches (not insightful, we knew there would be a group with broken, 
 # and a group without broken
-arr_dist4 <- dist(data.frame1$Ã¯..broken_windows, method = "euclidean")
+arr_dist4 <- dist(data.frame1$ï..broken_windows, method = "euclidean")
 arr_clust4 <- hclust(arr_dist4)
 arr_tree4 <-as.phylo(arr_clust4)
 plot(arr_tree4,cex = .5)
