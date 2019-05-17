@@ -765,3 +765,60 @@ gini.index(data.frame2$outofpocket_rent)
 gini.index(data.frame2$hhinc)
 gini.index(data.frame2$num_under6)
 gini.index(data.frame2$num_under18)
+                                            
+# Clustering Models ############################################
+################################################################
+
+
+# Grouping of about 1% of the data with number of under 6 year olds in 
+# Rented home (4 child leafs/groupings)
+
+length(data.frame2$num_under6)
+arr_dist <- dist(data.frame2$num_under6, method = "euclidean")
+arr_clust <-hclust(arr_dist)
+arr_tree <-as.phylo(arr_clust)
+plot(arr_tree,cex = .5)
+
+# Grouping of about 1% of the data with number of under 6 year olds in 
+# owned home (3 child leafs/groupings)
+
+arr_dist2 <- dist(data.frame1$num_under6, method = "euclidean")
+arr_clust2 <- hclust(arr_dist2)
+arr_tree2 <-as.phylo(arr_clust2)
+plot(arr_tree2,cex = .5)
+
+# Cluster with the highest gini index scores
+# Broken windows for owned homes
+# Out of pocket rent for rented homes
+# Too many branches to be useful
+arr_dist3 <- dist(data.frame2$outofpocket_rent, method = "euclidean")
+arr_clust3 <- hclust(arr_dist3)
+arr_tree3 <-as.phylo(arr_clust3)
+plot(arr_tree3,cex = .5)
+
+# Broken windows for owned homes
+# 2 branches (not insightful, we knew there would be a group with broken, 
+# and a group without broken
+arr_dist4 <- dist(data.frame1$ï..broken_windows, method = "euclidean")
+arr_clust4 <- hclust(arr_dist4)
+arr_tree4 <-as.phylo(arr_clust4)
+plot(arr_tree4,cex = .5)
+
+
+                                            
+# Middle value gini indices
+# Number of stories for owned homes
+# 7 branches
+arr_dist5 <- dist(data.frame1$num_stories, method = "euclidean")
+arr_clust5 <- hclust(arr_dist5)
+arr_tree5 <-as.phylo(arr_clust5)
+plot(arr_tree5,cex = .5)
+
+
+# Middle value gini indices
+# Number of stories for rented homes
+# 7 branches
+arr_dist6 <- dist(data.frame2$num_stories, method = "euclidean")
+arr_clust6 <- hclust(arr_dist6)
+arr_tree6 <-as.phylo(arr_clust6)
+plot(arr_tree6,cex = .5)
