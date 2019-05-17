@@ -823,3 +823,44 @@ arr_dist6 <- dist(data.frame2$num_stories, method = "euclidean")
 arr_clust6 <- hclust(arr_dist6)
 arr_tree6 <-as.phylo(arr_clust6)
 plot(arr_tree6,cex = .5)
+
+# k-Means clustering with k = 3 ###############################################
+
+# A simple k-means clustering based on num_units, num_stories, num_rooms
+# The most common grouping was (6, 7, 6), 
+# with (12, 3, 4) popping up occasionally
+library(cluster)
+library(HSAUR)
+fit <- kmeans(data.frame2[, 2:5], 3)
+dissE <- daisy(data.frame2[, 2:5]) 
+dE2 <- dissE^2
+sk2 <- silhouette(fit$cl, dE2)
+plot(sk2, main = "Cluster Plot Summary #1")
+
+# This looks at all columns beside the original row number
+# This model ended up with the same results regardless of which
+# random seed was chosen: (3, 4, 4, 12)
+fit <- kmeans(data.frame2[, -1], 3)
+dissE <- daisy(data.frame2[, -1]) 
+dE2 <- dissE^2
+sk2 <- silhouette(fit$cl, dE2)
+plot(sk2, main = "Cluster Plot Summary #2")
+
+# k-Means clustering with k = 5 ###############################################
+
+# A simple k-means clustering based on num_units, num_stories, num_rooms
+# The most common grouping was (1, 3, 3, 6, 6)
+fit <- kmeans(data.frame2[, 2:5], 5)
+dissE <- daisy(data.frame2[, 2:5]) 
+dE2 <- dissE^2
+sk2 <- silhouette(fit$cl, dE2)
+plot(sk2, main = "Cluster Plot Summary #3")
+
+
+# This looks at all columns beside the original row number
+# The most common result here was (2, 3, 3, 5, 6)
+fit <- kmeans(data.frame2[, 2:5], 5)
+dissE <- daisy(data.frame2[, -1]) 
+dE2 <- dissE^2
+sk2 <- silhouette(fit$cl, dE2)
+plot(sk2, main = "Cluster Plot Summary #4")
